@@ -9,6 +9,11 @@ import SwiftUI
 
 @main
 struct NBAAppApp: App {
+    
+    init() {
+        DependencyInjector.instance.injectDependencies()
+    }
+    
     var body: some Scene {
         WindowGroup {
             ContentView()
