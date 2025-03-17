@@ -15,8 +15,9 @@ class TypeDTO: DTO {
     private(set) var description: String
     private(set) var detail: String
     private(set) var shortDetail: String
+    private(set) var abbreviation: String
     
-    init(id: String, name: String, state: String, completed: Bool, description: String, detail: String, shortDetail: String) {
+    init(id: String, name: String, state: String, completed: Bool, description: String, detail: String, shortDetail: String, abbreviation: String) {
         self.id = id
         self.name = name
         self.state = state
@@ -24,6 +25,7 @@ class TypeDTO: DTO {
         self.description = description
         self.detail = detail
         self.shortDetail = shortDetail
+        self.abbreviation = abbreviation
     }
     
     func toEntity() -> TypeEntity {
@@ -34,7 +36,8 @@ class TypeDTO: DTO {
             completed: self.completed,
             description: self.description,
             detail: self.detail,
-            shortDetail: self.shortDetail
+            shortDetail: self.shortDetail,
+            abbreviation: self.abbreviation
         )
     }
     
@@ -46,7 +49,8 @@ class TypeDTO: DTO {
             completed: false,
             description: "",
             detail: "",
-            shortDetail: ""
+            shortDetail: "",
+            abbreviation: ""
         )
     }
 }
@@ -62,7 +66,8 @@ extension TypeDTO: ParseableDTO {
                 completed: data.getBool(key: "completed"),
                 description: data.getString(key: "description"),
                 detail: data.getString(key: "detail"),
-                shortDetail: data.getString(key: "shortDetail")
+                shortDetail: data.getString(key: "shortDetail"),
+                abbreviation: data.getString(key: "abbreviation")
             )
         }
         return nil

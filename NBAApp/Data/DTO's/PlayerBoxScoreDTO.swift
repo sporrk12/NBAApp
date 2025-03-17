@@ -20,12 +20,12 @@ class PlayerBoxScoreDTO: DTO {
     
     func toEntity() -> PlayerBoxScoreEntity {
         return .init(
-            team: team.toEntity(),
+            team: self.team.toEntity(),
             statistics: .init(
                 count: self.statistics.count,
                 items: self.statistics.items.compactMap{ $0.toEntity() }
             ),
-            displayOrder: displayOrder
+            displayOrder: self.displayOrder
         )
     }
     
@@ -79,5 +79,3 @@ extension PlayerBoxScoreDTO: ParseableDTO {
         return nil
     }
 }
-
-

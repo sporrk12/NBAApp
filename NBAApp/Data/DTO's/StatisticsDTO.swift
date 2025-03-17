@@ -9,13 +9,15 @@ import Foundation
 
 class StatisticsDTO: DTO {
     private(set) var name: String
+    private(set) var displayName: String
     private(set) var abbreviation: String
     private(set) var displayValue: String
     private(set) var label: String
     
 
-    init(name: String, abbreviation: String, displayValue: String, label: String) {
+    init(name: String, displayName: String, abbreviation: String, displayValue: String, label: String) {
         self.name = name
+        self.displayName = displayName
         self.abbreviation = abbreviation
         self.displayValue = displayValue
         self.label = label
@@ -24,6 +26,7 @@ class StatisticsDTO: DTO {
     func toEntity() -> StatisticsEntity {
         return .init(
             name: self.name,
+            displayName: self.displayName,
             abbreviation: self.abbreviation,
             displayValue: self.displayValue,
             label: self.label
@@ -33,6 +36,7 @@ class StatisticsDTO: DTO {
     static var defaultValue: StatisticsDTO {
         .init(
             name: "",
+            displayName: "",
             abbreviation: "",
             displayValue: "",
             label: ""
@@ -46,6 +50,7 @@ extension StatisticsDTO: ParseableDTO {
             
             return .init(
                 name: data.getString(key: "name"),
+                displayName: data.getString(key: "displayName"),
                 abbreviation: data.getString(key: "abbreviation"),
                 displayValue: data.getString(key: "displayValue"),
                 label: data.getString(key: "label")

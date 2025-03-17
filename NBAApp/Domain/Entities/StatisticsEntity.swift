@@ -9,6 +9,7 @@ import Foundation
 
 struct StatisticsEntity: Entity {
     let name: String
+    let displayName: String
     let abbreviation: String
     let displayValue: String
     let label: String
@@ -16,6 +17,7 @@ struct StatisticsEntity: Entity {
     static var defaultValue: StatisticsEntity {
         .init(
             name: "",
+            displayName: "",
             abbreviation: "",
             displayValue: "",
             label: ""

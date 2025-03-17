@@ -15,6 +15,7 @@ struct TypeEntity: Entity {
     let description: String
     let detail: String
     let shortDetail: String
+    let abbreviation: String
     
     static var defaultValue: TypeEntity{
         .init(
@@ -24,7 +25,8 @@ struct TypeEntity: Entity {
             completed: false,
             description: "",
             detail: "",
-            shortDetail: ""
+            shortDetail: "",
+            abbreviation: ""
         )
     }
 }
