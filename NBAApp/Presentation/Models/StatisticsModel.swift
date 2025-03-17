@@ -9,12 +9,14 @@ import Foundation
 
 class StatisticsModel: Model {
     private(set) var name: String
+    private(set) var displayName: String
     private(set) var abbreviation: String
     private(set) var displayValue: String
     private(set) var label: String
-    
-    init(name: String, abbreviation: String, displayValue: String, label: String) {
+
+    init(name: String, displayName: String, abbreviation: String, displayValue: String, label: String) {
         self.name = name
+        self.displayName = displayName
         self.abbreviation = abbreviation
         self.displayValue = displayValue
         self.label = label
@@ -23,6 +25,7 @@ class StatisticsModel: Model {
     func toEntity() -> StatisticsEntity {
         return .init(
             name: self.name,
+            displayName: self.displayName,
             abbreviation: self.abbreviation,
             displayValue: self.displayValue,
             label: self.label
@@ -32,6 +35,7 @@ class StatisticsModel: Model {
     static var defaultValue: StatisticsModel {
         .init(
             name: "",
+            displayName: "",
             abbreviation: "",
             displayValue: "",
             label: ""
@@ -41,6 +45,7 @@ class StatisticsModel: Model {
     static var shimmerValue: StatisticsModel {
         .init(
             name: "Points",
+            displayName: "Points",
             abbreviation: "PTS",
             displayValue: "25",
             label: "PTS"
@@ -61,6 +66,7 @@ extension StatisticsModel: ParseableModel {
         if let data: StatisticsEntity = data as? StatisticsEntity {
             return .init(
                 name: data.name,
+                displayName: data.displayName,
                 abbreviation: data.abbreviation,
                 displayValue: data.displayValue,
                 label: data.label

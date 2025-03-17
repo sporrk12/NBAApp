@@ -27,12 +27,13 @@ class TypeModel: Model {
     private(set) var description: String
     private(set) var detail: String
     private(set) var shortDetail: String
+    private(set) var abbreviation: String
     
     var typeCategory: StatusTypeCategory {
         return StatusTypeCategory(id: self.id)
     }
     
-    init(id: String, name: String, state: String, completed: Bool, description: String, detail: String, shortDetail: String) {
+    init(id: String, name: String, state: String, completed: Bool, description: String, detail: String, shortDetail: String, abbreviation: String) {
         self.id = id
         self.name = name
         self.state = state
@@ -40,6 +41,7 @@ class TypeModel: Model {
         self.description = description
         self.detail = detail
         self.shortDetail = shortDetail
+        self.abbreviation = abbreviation
     }
     
     func toEntity() -> TypeEntity {
@@ -50,7 +52,8 @@ class TypeModel: Model {
             completed: self.completed,
             description: self.description,
             detail: self.detail,
-            shortDetail: self.shortDetail
+            shortDetail: self.shortDetail,
+            abbreviation: self.abbreviation
         )
     }
     
@@ -62,7 +65,8 @@ class TypeModel: Model {
             completed: false,
             description: "",
             detail: "",
-            shortDetail: ""
+            shortDetail: "",
+            abbreviation: ""
         )
     }
     
@@ -74,7 +78,8 @@ class TypeModel: Model {
             completed: false,
             description: "Description placeholder",
             detail: "Detail placeholder",
-            shortDetail: "Short detail"
+            shortDetail: "Short detail",
+            abbreviation: "SH"
         )
     }
     
@@ -97,7 +102,8 @@ extension TypeModel: ParseableModel {
                 completed: data.completed,
                 description: data.description,
                 detail: data.detail,
-                shortDetail: data.shortDetail
+                shortDetail: data.shortDetail,
+                abbreviation: data.abbreviation
             )
         }
         return .defaultValue

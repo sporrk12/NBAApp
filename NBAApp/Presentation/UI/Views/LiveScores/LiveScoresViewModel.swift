@@ -6,7 +6,6 @@
 //
 
 import Foundation
-import Combine
 
 @MainActor
 class LiveScoresViewModel: ViewModel {
@@ -14,13 +13,12 @@ class LiveScoresViewModel: ViewModel {
     
     private var getGamesByDateUseCase: GetGamesByDateUseCase
     
-    
     init(getGamesByDateUseCase: GetGamesByDateUseCase) {
         self.getGamesByDateUseCase = getGamesByDateUseCase
         super.init()
         let todayString = Date().toString()
         self.getGamesByDate(date: todayString)
-
+        
     }
     
     func getGamesByDate(date: String) {
