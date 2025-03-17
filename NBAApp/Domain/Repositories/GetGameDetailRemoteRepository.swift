@@ -8,5 +8,5 @@
 import Foundation
 
 protocol GetGameDetailRemoteRepository: RemoteRepository {
-    func getGamesDetail(gameId: String) async throws -> CountedListEntity<BoxScoreEntity>
+    func getGamesDetail(gameId: String) async throws -> GameDetailCatalogEntity
 }

@@ -10,6 +10,7 @@ import SwiftUI
 struct LiveScoresView: View {
     @Environment(\.scenePhase) private var scenePhase
     @State private var selectedDate: Date = Date()
+    @State private var selectedGame: EventModel?
     @StateObject private var viewModel = LiveScoresViewModel(
         getGamesByDateUseCase: DependencyInjector.instance.getDependency()!
     )
@@ -37,7 +38,9 @@ struct LiveScoresView: View {
                             .frame(height: 70)
                             
                             ForEach(self.viewModel.gameByDayScoresAsyncData.data?.items ?? [], id: \.id) { game in
-                                LiveGameRowView(game: game)
+                                NavigationLink(destination: GameDetailView(gameId: game.id)) {
+                                    LiveGameRowView(game: game)
+                                }
                             }
                         }
                         .padding()
@@ -53,6 +56,7 @@ struct LiveScoresView: View {
                 self.viewModel.getGamesByDate(date: newDate.toString())
                 
             }
+            
         }
         .onReceive(NotificationCenter.default.publisher(for: UIApplication.willEnterForegroundNotification)) { _ in
             self.refreshLiveScores()
