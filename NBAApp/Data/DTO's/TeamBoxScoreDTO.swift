@@ -10,10 +10,10 @@ import Foundation
 class TeamBoxScoreDTO: DTO {
     private(set) var team: TeamDTO
     private(set) var statistics: CountedListDTO<StatisticsDTO>
-    private(set) var displayOrder: String
+    private(set) var displayOrder: Int
     private(set) var homeAway: String
     
-    init(team: TeamDTO, statistics: CountedListDTO<StatisticsDTO>, displayOrder: String, homeAway: String) {
+    init(team: TeamDTO, statistics: CountedListDTO<StatisticsDTO>, displayOrder: Int, homeAway: String) {
         self.team = team
         self.statistics = statistics
         self.displayOrder = displayOrder
@@ -36,7 +36,7 @@ class TeamBoxScoreDTO: DTO {
         .init(
             team: .defaultValue,
             statistics: .defaultValue,
-            displayOrder: "",
+            displayOrder: 0,
             homeAway: ""
         )
     }
@@ -51,7 +51,7 @@ extension TeamBoxScoreDTO: ParseableDTO {
             return .init(
                 team: .toObject(fromData: data.getDictionary(key: "team")) ?? .defaultValue,
                 statistics: statistics,
-                displayOrder: data.getString(key: "displayOrder"),
+                displayOrder: data.getInt(key: "displayOrder"),
                 homeAway: data.getString(key: "homeAway")
             )
         }

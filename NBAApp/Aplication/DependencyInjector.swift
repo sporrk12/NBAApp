@@ -52,6 +52,8 @@ class DependencyInjector {
         self.registerDependency({ GetGamesByDateDataSourceRemoteRepository(dataSource: httpDataSource) as GetGamesByDateRemoteRepository})
         
         self.registerDependency({ GetGameDetailDataSourceRemoteRepository(dataSource: httpDataSource) as GetGameDetailRemoteRepository})
+        
+        self.registerDependency({ GetTeamInformationDataSourceRemoteRepository(dataSource: httpDataSource) as GetTeamInformationRemoteRepository})
     }
     
     private func injectUseCases() {
@@ -63,8 +65,9 @@ class DependencyInjector {
         self.registerDependency({ GetGameDetailUseCase(
             getGameDetailRemoteRepository: self.getDependency()!)
         })
+        
+        self.registerDependency({ GetTeamInformationUseCase(
+            getTeamInformationRemoteRepository: self.getDependency()!)
+        })
     }
 }
-
-
-

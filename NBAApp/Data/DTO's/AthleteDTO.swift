@@ -68,9 +68,9 @@ extension AthleteDTO: ParseableDTO {
                 fullName: data.getString(key: "fullName"),
                 displayName: data.getString(key: "displayName"),
                 shortName: data.getString(key: "shortName"),
-                headshot: data.getString(key: "headshot"),
+                headshot: data.getDictionary(key: "headshot").getString(key: "href"),
                 jersey: data.getString(key: "jersey"),
-                position: data.getString(key: "position"),
+                position: data.getDictionary(key: "position").getString(key: "abbreviation"),
                 team: .toObject(fromData: data.getDictionary(key: "team")) ?? .defaultValue,
                 active: data.getBool(key: "active")
             )

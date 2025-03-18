@@ -9,9 +9,9 @@ import Foundation
 
 class LeadersDTO: DTO {
     private(set) var team: TeamDTO
-    private(set) var leaders: LeaderDTO
+    private(set) var leaders: CountedListDTO<LeaderDTO>
     
-    init(team: TeamDTO, leaders: LeaderDTO) {
+    init(team: TeamDTO, leaders: CountedListDTO<LeaderDTO>) {
         self.team = team
         self.leaders = leaders
     }
@@ -19,7 +19,10 @@ class LeadersDTO: DTO {
     func toEntity() -> LeadersEntity {
         return .init(
             team: self.team.toEntity(),
-            leaders: self.leaders.toEntity()
+            leaders: .init(
+                count: self.leaders.count,
+                items: self.leaders.items.compactMap { $0.toEntity() }
+            )
         )
     }
     
@@ -35,10 +38,11 @@ extension LeadersDTO: ParseableDTO {
     static func toObject(fromData data: Any?) -> LeadersDTO? {
         if let data: [String: Any] = data as? [String: Any] {
             
+            let leaders: CountedListDTO<LeaderDTO> = LeaderDTO.toList(fromData: data.getArray(key: "leaders")) ?? .defaultValue
             
             return .init(
                 team: .toObject(fromData: data.getDictionary(key: "team")) ?? .defaultValue,
-                leaders: .toObject(fromData: data.getDictionary(key: "leaders")) ?? .defaultValue
+                leaders: leaders
             )
         }
         return nil

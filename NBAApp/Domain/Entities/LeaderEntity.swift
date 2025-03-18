@@ -12,7 +12,7 @@ struct LeaderEntity: Entity {
     let displayName: String
     let shortDisplayName: String
     let abbreviation: String
-    let leaderInfo: LeaderInfoEntity
+    let leaderInfo: CountedListEntity<LeaderInfoEntity>
     
     static var defaultValue: LeaderEntity {
         .init(

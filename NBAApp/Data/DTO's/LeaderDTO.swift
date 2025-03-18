@@ -12,10 +12,9 @@ class LeaderDTO: DTO {
     private(set) var displayName: String
     private(set) var shortDisplayName: String
     private(set) var abbreviation: String
-    private(set) var leaderInfo: LeaderInfoDTO
+    private(set) var leaderInfo: CountedListDTO<LeaderInfoDTO>
     
-    
-    init(name: String, displayName: String, shortDisplayName: String, abbreviation: String, leaderInfo: LeaderInfoDTO) {
+    init(name: String, displayName: String, shortDisplayName: String, abbreviation: String, leaderInfo: CountedListDTO<LeaderInfoDTO>) {
         self.name = name
         self.displayName = displayName
         self.shortDisplayName = shortDisplayName
@@ -29,7 +28,10 @@ class LeaderDTO: DTO {
             displayName: self.displayName,
             shortDisplayName: self.shortDisplayName,
             abbreviation: self.abbreviation,
-            leaderInfo: self.leaderInfo.toEntity()
+            leaderInfo: .init(
+                count: self.leaderInfo.count,
+                items: self.leaderInfo.items.compactMap { $0.toEntity() }
+            )
         )
     }
     
@@ -48,12 +50,14 @@ extension LeaderDTO: ParseableDTO {
     static func toObject(fromData data: Any?) -> LeaderDTO? {
         if let data: [String: Any] = data as? [String: Any] {
             
+            let leadersInfo: CountedListDTO<LeaderInfoDTO> = LeaderInfoDTO.toList(fromData: data.getArray(key: "leaders")) ?? .defaultValue
+            
             return .init(
                 name: data.getString(key: "name"),
                 displayName: data.getString(key: "displayName"),
                 shortDisplayName: data.getString(key: "shortDisplayName"),
                 abbreviation: data.getString(key: "abbreviation"),
-                leaderInfo: .toObject(fromData: data.getDictionary(key: "leaders")) ?? .defaultValue
+                leaderInfo: leadersInfo
             )
         }
         return nil

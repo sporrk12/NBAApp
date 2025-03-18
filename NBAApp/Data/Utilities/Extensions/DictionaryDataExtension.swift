@@ -87,6 +87,30 @@ extension Dictionary {
 
         return defaultValue
     }
+    
+    func getStringArray(key: Key, defaultValue: [String] = []) -> [String] {
+        if self.hasNoKey(key) {
+            return defaultValue
+        }
+
+        if let value: [String] = self[key] as? [String] {
+            return value
+        }
+
+        if let value: String = self[key] as? String {
+            if let data: Data = value.data(using: .utf8) {
+                do {
+                    if let jsonArray: [String] = try JSONSerialization.jsonObject(with: data) as? [String] {
+                        return jsonArray
+                    }
+                } catch {
+                    return defaultValue
+                }
+            }
+        }
+
+        return defaultValue
+    }
 
     func getString(keys: [Key], defaultValue: String = "") -> String {
         var value: String = defaultValue

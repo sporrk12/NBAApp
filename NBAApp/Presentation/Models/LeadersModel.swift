@@ -9,9 +9,9 @@ import Foundation
 
 class LeadersModel: Model {
     private(set) var team: TeamModel
-    private(set) var leaders: LeaderModel
+    private(set) var leaders: CountedListModel<LeaderModel>
 
-    init(team: TeamModel, leaders: LeaderModel) {
+    init(team: TeamModel, leaders: CountedListModel<LeaderModel>) {
         self.team = team
         self.leaders = leaders
     }
@@ -19,7 +19,10 @@ class LeadersModel: Model {
     func toEntity() -> LeadersEntity {
         return .init(
             team: self.team.toEntity(),
-            leaders: self.leaders.toEntity()
+            leaders: .init(
+                count: self.leaders.count,
+                items: self.leaders.items.compactMap { $0.toEntity() }
+            )
         )
     }
 
@@ -51,7 +54,7 @@ extension LeadersModel: ParseableModel {
         if let data: LeadersEntity = data as? LeadersEntity {
             return .init(
                 team: TeamModel.toObject(fromData: data.team),
-                leaders: LeaderModel.toObject(fromData: data.leaders)
+                leaders: LeaderModel.toList(fromData: data.leaders)
             )
         }
         return .defaultValue

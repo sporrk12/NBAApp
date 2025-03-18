@@ -10,10 +10,10 @@ import Foundation
 class TeamBoxScoreModel: Model {
     private(set) var team: TeamModel
     private(set) var statistics: CountedListModel<StatisticsModel>
-    private(set) var displayOrder: String
+    private(set) var displayOrder: Int
     private(set) var homeAway: String
 
-    init(team: TeamModel, statistics: CountedListModel<StatisticsModel>, displayOrder: String, homeAway: String) {
+    init(team: TeamModel, statistics: CountedListModel<StatisticsModel>, displayOrder: Int, homeAway: String) {
         self.team = team
         self.statistics = statistics
         self.displayOrder = displayOrder
@@ -36,7 +36,7 @@ class TeamBoxScoreModel: Model {
         .init(
             team: .defaultValue,
             statistics: .defaultValue,
-            displayOrder: "",
+            displayOrder: 0,
             homeAway: ""
         )
     }
@@ -48,7 +48,7 @@ class TeamBoxScoreModel: Model {
                 count: 5,
                 items: (1...5).map { _ in .shimmerValue }
             ),
-            displayOrder: "1",
+            displayOrder: 1,
             homeAway: "home"
         )
     }

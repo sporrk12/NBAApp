@@ -9,7 +9,7 @@ import Foundation
 
 struct LeadersEntity: Entity {
     let team: TeamEntity
-    let leaders: LeaderEntity
+    let leaders: CountedListEntity<LeaderEntity>
     
     static var defaultValue: LeadersEntity {
         .init(

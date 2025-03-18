@@ -65,7 +65,7 @@ extension AthletesDTO: ParseableDTO {
                 didNotPlay: data.getBool(key: "didNotPlay"),
                 reason: data.getString(key: "reason"),
                 ejected: data.getBool(key: "ejected"),
-                stats: String.toList(fromData: data.getArray(key: "stats")) ?? .defaultValue
+                stats: String.toList(fromData: data.getStringArray(key: "stats")) ?? .defaultValue
             )
         }
         return nil

@@ -12,9 +12,9 @@ class LeaderModel: Model {
     private(set) var displayName: String
     private(set) var shortDisplayName: String
     private(set) var abbreviation: String
-    private(set) var leaderInfo: LeaderInfoModel
+    private(set) var leaderInfo: CountedListModel<LeaderInfoModel>
     
-    init(name: String, displayName: String, shortDisplayName: String, abbreviation: String, leaderInfo: LeaderInfoModel) {
+    init(name: String, displayName: String, shortDisplayName: String, abbreviation: String, leaderInfo: CountedListModel<LeaderInfoModel>) {
         self.name = name
         self.displayName = displayName
         self.shortDisplayName = shortDisplayName
@@ -28,7 +28,10 @@ class LeaderModel: Model {
             displayName: self.displayName,
             shortDisplayName: self.shortDisplayName,
             abbreviation: self.abbreviation,
-            leaderInfo: self.leaderInfo.toEntity()
+            leaderInfo: .init(
+                count: self.leaderInfo.count,
+                items: self.leaderInfo.items.compactMap { $0.toEntity() }
+            )
         )
     }
     
@@ -69,7 +72,7 @@ extension LeaderModel: ParseableModel {
                 displayName: data.displayName,
                 shortDisplayName: data.shortDisplayName,
                 abbreviation: data.abbreviation,
-                leaderInfo: LeaderInfoModel.toObject(fromData: data.leaderInfo)
+                leaderInfo: LeaderInfoModel.toList(fromData: data.leaderInfo)
             )
         }
         return .defaultValue

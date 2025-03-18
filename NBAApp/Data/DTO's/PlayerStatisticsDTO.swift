@@ -73,10 +73,10 @@ extension PlayerStatisticsDTO: ParseableDTO {
             let athletes: CountedListDTO<AthletesDTO> = AthletesDTO.toList(fromData: data.getArray(key: "athletes")) ?? .defaultValue
             
             return .init(
-                names: String.toList(fromData: data.getArray(key: "names")) ?? .defaultValue,
-                keys: String.toList(fromData: data.getArray(key: "keys")) ?? .defaultValue,
-                labels: String.toList(fromData: data.getArray(key: "labels")) ?? .defaultValue,
-                descriptions: String.toList(fromData: data.getArray(key: "descriptions")) ?? .defaultValue,
+                names: String.toList(fromData: data.getStringArray(key: "names")) ?? .defaultValue,
+                keys: String.toList(fromData: data.getStringArray(key: "keys")) ?? .defaultValue,
+                labels: String.toList(fromData: data.getStringArray(key: "labels")) ?? .defaultValue,
+                descriptions: String.toList(fromData: data.getStringArray(key: "descriptions")) ?? .defaultValue,
                 athletes: athletes,
                 totals: String.toList(fromData: data.getArray(key: "totals")) ?? .defaultValue
             )
