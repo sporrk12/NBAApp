@@ -38,7 +38,13 @@ struct LiveScoresView: View {
                             .frame(height: 70)
                             
                             ForEach(self.viewModel.gameByDayScoresAsyncData.data?.items ?? [], id: \.id) { game in
-                                NavigationLink(destination: GameDetailView(gameId: game.id)) {
+                                NavigationLink(
+                                    destination:
+                                        GameDetailView(
+                                            gameId: game.id,
+                                            gameStatus: game.status.type.typeCategory
+                                        )
+                                ){
                                     LiveGameRowView(game: game)
                                 }
                             }
@@ -54,9 +60,7 @@ struct LiveScoresView: View {
             }
             .onChange(of: selectedDate) { oldDate, newDate in
                 self.viewModel.getGamesByDate(date: newDate.toString())
-                
             }
-            
         }
         .onReceive(NotificationCenter.default.publisher(for: UIApplication.willEnterForegroundNotification)) { _ in
             self.refreshLiveScores()

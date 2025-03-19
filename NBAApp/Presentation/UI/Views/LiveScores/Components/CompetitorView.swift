@@ -21,35 +21,42 @@ struct CompetitorView: View {
             .resizable()
             .frame(width: 80, height: 80)
             
+            Spacer()
+            
             Text(team.team.displayName)
-                .font(.subheadline)
+                .font(Font(Fonts.body1.medium500))
+                
+            Spacer()
             
             switch status {
             case .pre:
                 Text(team.records.items.first?.summary ?? "")
-                    .font(.subheadline)
+                    .font(Font(Fonts.h4.medium500))
+                   
                 
             case .inProgress:
                 Text(team.score)
-                    .font(.title)
-                    .bold()
+                    .font(Font(Fonts.h2.semibold600))
+               
                 
             case .final:
                 Text(team.score)
-                    .font(.title)
-                    .bold()
+                    .font(Font(Fonts.h2.semibold600))
+                   
                 
             case .finalQuarter:
                 Text(team.score)
-                    .font(.title)
-                    .bold()
+                    .font(Font(Fonts.h2.semibold600))
+                   
                 
             case .unknown:
                 EmptyView()
                 
  
             }
+                
         }
+        .foregroundStyle(Color.white)
         .frame(maxWidth: .infinity)
     }
 }

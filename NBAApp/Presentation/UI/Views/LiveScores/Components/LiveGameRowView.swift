@@ -14,8 +14,6 @@ struct LiveGameRowView: View {
     var body: some View {
         VStack(alignment: .center, spacing: 20) {
             
-        
-            
             HStack {
                 if let competition = game.competitions.items.first {
                     ForEach(competition.competitors.items, id: \.team.id) { team in
@@ -27,9 +25,11 @@ struct LiveGameRowView: View {
             switch self.game.status.type.typeCategory {
             case .pre:
                 Text(self.game.date.convertUTCtoCSTTime() ?? "")
+                    .font(Font(Fonts.h2.medium500))
                 
             case .inProgress, .final, .finalQuarter:
                 Text(self.game.status.type.detail)
+                    .font(Font(Fonts.body1.medium500))
                 
             default:
                 Text("")
@@ -37,6 +37,7 @@ struct LiveGameRowView: View {
             }
             
         }
+        .foregroundStyle(Color.white)
         .padding()
         .background(RoundedRectangle(cornerRadius: 10).stroke(Color.gray, lineWidth: 1))
     }
