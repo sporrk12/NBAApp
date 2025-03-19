@@ -9,6 +9,7 @@ import Foundation
 
 class GameEventModel: Model {
     private(set) var id: String
+    private(set) var atVs: String
     private(set) var gameDate: String
     private(set) var score: String
     private(set) var homeTeamId: String
@@ -18,8 +19,9 @@ class GameEventModel: Model {
     private(set) var gameResult: String
     private(set) var opponent: TeamModel
 
-    init(id: String, gameDate: String, score: String, homeTeamId: String, awayTeamId: String, homeTeamScore: String, awayTeamScore: String, gameResult: String, opponent: TeamModel) {
+    init(id: String, atVs: String, gameDate: String, score: String, homeTeamId: String, awayTeamId: String, homeTeamScore: String, awayTeamScore: String, gameResult: String, opponent: TeamModel) {
         self.id = id
+        self.atVs = atVs
         self.gameDate = gameDate
         self.score = score
         self.homeTeamId = homeTeamId
@@ -33,6 +35,7 @@ class GameEventModel: Model {
     func toEntity() -> GameEventEntity {
         return .init(
             id: self.id,
+            atVs: self.atVs,
             gameDate: self.gameDate,
             score: self.score,
             homeTeamId: self.homeTeamId,
@@ -47,6 +50,7 @@ class GameEventModel: Model {
     static var defaultValue: GameEventModel {
         return .init(
             id: "",
+            atVs: "",
             gameDate: "",
             score: "",
             homeTeamId: "",
@@ -61,6 +65,7 @@ class GameEventModel: Model {
     static var shimmerValue: GameEventModel {
         return .init(
             id: "12345",
+            atVs: "VS",
             gameDate: "2025-03-15",
             score: "100 - 98",
             homeTeamId: "LAL",
@@ -86,6 +91,7 @@ extension GameEventModel: ParseableModel {
         if let data: GameEventEntity = data as? GameEventEntity {
             return .init(
                 id: data.id,
+                atVs: data.atVs,
                 gameDate: data.gameDate,
                 score: data.score,
                 homeTeamId: data.homeTeamId,

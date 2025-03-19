@@ -9,6 +9,7 @@ import Foundation
 
 struct GameEventEntity: Entity {
     let id: String
+    let atVs: String
     let gameDate: String
     let score: String
     let homeTeamId: String
@@ -21,6 +22,7 @@ struct GameEventEntity: Entity {
     static var defaultValue: GameEventEntity {
         .init(
             id: "",
+            atVs: "",
             gameDate: "",
             score: "",
             homeTeamId: "",

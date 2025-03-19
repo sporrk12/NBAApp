@@ -41,8 +41,8 @@ extension PredictorDTO: ParseableDTO {
             
             return .init(
                 header: data.getString(key: "header"),
-                homeProjection: data.getDictionary(key: "awayTeam").getString(key: "gameProjection"),
-                awayProjection: data.getDictionary(key: "awayTeam").getString(key: "teamChanceLoss")
+                homeProjection: data.getDictionary(key: "awayTeam").getString(key: "teamChanceLoss"),
+                awayProjection: data.getDictionary(key: "awayTeam").getString(key: "gameProjection")
             )
             
         }

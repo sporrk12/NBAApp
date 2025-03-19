@@ -9,6 +9,7 @@ import Foundation
 
 class GameEventDTO: DTO {
     private(set) var id: String
+    private(set) var atVs: String
     private(set) var gameDate: String
     private(set) var score: String
     private(set) var homeTeamId: String
@@ -18,8 +19,9 @@ class GameEventDTO: DTO {
     private(set) var gameResult: String
     private(set) var opponent: TeamDTO
     
-    init(id: String, gameDate: String, score: String, homeTeamId: String, awayTeamId: String, homeTeamScore: String, awayTeamScore: String, gameResult: String, opponent: TeamDTO) {
+    init(id: String, atVs: String, gameDate: String, score: String, homeTeamId: String, awayTeamId: String, homeTeamScore: String, awayTeamScore: String, gameResult: String, opponent: TeamDTO) {
         self.id = id
+        self.atVs = atVs
         self.gameDate = gameDate
         self.score = score
         self.homeTeamId = homeTeamId
@@ -33,6 +35,7 @@ class GameEventDTO: DTO {
     func toEntity() -> GameEventEntity {
         return .init(
             id: self.id,
+            atVs: self.atVs,
             gameDate: self.gameDate,
             score: self.score,
             homeTeamId: self.homeTeamId,
@@ -47,6 +50,7 @@ class GameEventDTO: DTO {
     static var defaultValue: GameEventDTO {
         return .init(
             id: "",
+            atVs: "",
             gameDate: "",
             score: "",
             homeTeamId: "",
@@ -65,6 +69,7 @@ extension GameEventDTO: ParseableDTO {
     
             return .init(
                 id: data.getString(key: "id"),
+                atVs: data.getString(key: "atVs"),
                 gameDate: data.getString(key: "gameDate"),
                 score: data.getString(key: "score"),
                 homeTeamId: data.getString(key: "homeTeamId"),

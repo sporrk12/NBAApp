@@ -24,5 +24,20 @@ extension String {
         }
         return nil
     }
+    
+    func convertUTCtoDate() -> String? {
+        let inputFormatter = DateFormatter()
+        inputFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm'Z'"
+        inputFormatter.timeZone = TimeZone(abbreviation: "UTC")
+
+        let outputFormatter = DateFormatter()
+        outputFormatter.dateFormat = "dd/MM/yy"
+        outputFormatter.timeZone = TimeZone(secondsFromGMT: -21600)
+
+        if let date = inputFormatter.date(from: self) {
+            return outputFormatter.string(from: date)
+        }
+        return nil
+    }
 }
 
