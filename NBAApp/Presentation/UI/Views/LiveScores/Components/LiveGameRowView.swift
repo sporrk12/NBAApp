@@ -58,7 +58,7 @@ struct LiveGameRowView: View {
                     address: AddressModel(
                         city: "Detroit",
                         state: "MI"
-                    )
+                    ), image: "https://a.espncdn.com/i/venues/nba/day/516.jpg"
                 ),
                 competitors: .init(
                     count: 2,

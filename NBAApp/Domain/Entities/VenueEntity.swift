@@ -11,12 +11,14 @@ struct VenueEntity: Entity {
     let id: String
     let fullName: String
     let address: AddressEntity
+    let image: String
     
     static var defaultValue: VenueEntity {
         .init(
             id: "",
             fullName: "",
-            address: .defaultValue
+            address: .defaultValue,
+            image: ""
         )
     }
     

@@ -11,18 +11,21 @@ class VenueDTO: DTO {
     private(set) var id: String
     private(set) var fullName: String
     private(set) var address: AddressDTO
+    private(set) var image: String
     
-    init(id: String, fullName: String, address: AddressDTO) {
+    init(id: String, fullName: String, address: AddressDTO, image: String) {
         self.id = id
         self.fullName = fullName
         self.address = address
+        self.image = image
     }
     
     func toEntity() -> VenueEntity {
         return .init(
             id: self.id,
             fullName: self.fullName,
-            address: self.address.toEntity()
+            address: self.address.toEntity(),
+            image: self.image
         )
     }
     
@@ -30,7 +33,8 @@ class VenueDTO: DTO {
         .init(
             id: "",
             fullName: "",
-            address: .defaultValue
+            address: .defaultValue,
+            image: ""
         )
     }
 }
@@ -39,10 +43,14 @@ extension VenueDTO: ParseableDTO {
     static func toObject(fromData data: Any?) -> VenueDTO? {
         if let data: [String: Any] = data as? [String: Any] {
             
+            let images = data.getArray(key: "images")
+            
+            
             return .init(
                 id: data.getString(key: "id"),
                 fullName: data.getString(key: "fullName"),
-                address: .toObject(fromData: data.getDictionary(key: "address")) ?? .defaultValue
+                address: .toObject(fromData: data.getDictionary(key: "address")) ?? .defaultValue,
+                image: images.first?.getString(key: "href") ?? .defaultValue
             )
         }
         return nil

@@ -11,18 +11,21 @@ class VenueModel: Model {
     private(set) var id: String
     private(set) var fullName: String
     private(set) var address: AddressModel
+    private(set) var image: String
     
-    init(id: String, fullName: String, address: AddressModel) {
+    init(id: String, fullName: String, address: AddressModel, image: String) {
         self.id = id
         self.fullName = fullName
         self.address = address
+        self.image = image
     }
     
     func toEntity() -> VenueEntity {
         return .init(
             id: self.id,
             fullName: self.fullName,
-            address: self.address.toEntity()
+            address: self.address.toEntity(),
+            image: self.image
         )
     }
     
@@ -30,7 +33,8 @@ class VenueModel: Model {
         .init(
             id: "",
             fullName: "",
-            address: .defaultValue
+            address: .defaultValue,
+            image: ""
         )
     }
     
@@ -38,7 +42,8 @@ class VenueModel: Model {
         .init(
             id: "0000",
             fullName: "Lorem Ipsum Arena",
-            address: .shimmerValue
+            address: .shimmerValue,
+            image: "Lorem"
         )
     }
     
@@ -57,7 +62,8 @@ extension VenueModel: ParseableModel {
             return .init(
                 id: data.id,
                 fullName: data.fullName,
-                address: AddressModel.toObject(fromData: data.address)
+                address: AddressModel.toObject(fromData: data.address),
+                image: data.image
             )
         }
         return .defaultValue
