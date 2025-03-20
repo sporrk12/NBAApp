@@ -12,6 +12,7 @@ enum StatusTypeCategory: String {
     case inProgress = "2"
     case final = "3"
     case finalQuarter = "22"
+    case halftime = "23"
     case unknown
     
     init(id: String) {

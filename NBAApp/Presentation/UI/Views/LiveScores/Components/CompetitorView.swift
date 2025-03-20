@@ -33,21 +33,14 @@ struct CompetitorView: View {
                 Text(team.records.items.first?.summary ?? "")
                     .font(Font(Fonts.h4.medium500))
                    
-                
-            case .inProgress:
-                Text(team.score)
-                    .font(Font(Fonts.h2.semibold600))
+   
                
                 
-            case .final:
+            case .final, .finalQuarter, .inProgress, .halftime:
                 Text(team.score)
                     .font(Font(Fonts.h2.semibold600))
                    
                 
-            case .finalQuarter:
-                Text(team.score)
-                    .font(Font(Fonts.h2.semibold600))
-                   
                 
             case .unknown:
                 EmptyView()
@@ -94,5 +87,6 @@ struct CompetitorView: View {
             )
         ), status: StatusTypeCategory(id: "1")
     )
+    .frame(width: 400, height: 100)
 }
 

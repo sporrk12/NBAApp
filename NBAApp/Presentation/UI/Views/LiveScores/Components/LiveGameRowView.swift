@@ -27,7 +27,7 @@ struct LiveGameRowView: View {
                 Text(self.game.date.convertUTCtoCSTTime() ?? "")
                     .font(Font(Fonts.h2.medium500))
                 
-            case .inProgress, .final, .finalQuarter:
+            case .inProgress, .final, .finalQuarter, .halftime:
                 Text(self.game.status.type.detail)
                     .font(Font(Fonts.body1.medium500))
                 

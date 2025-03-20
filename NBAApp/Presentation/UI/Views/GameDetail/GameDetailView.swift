@@ -41,16 +41,17 @@ struct GameDetailView: View {
                             
                             LastFiveGamesView(lastFiveGames: self.viewModel.gameDetailCatalogAsyncData.data?.lastFiveGames ?? .defaultValue)
                             
-                            VenueInformationView(venue: self.viewModel.gameDetailCatalogAsyncData.data?.venue ?? .defaultValue)
-                        case .inProgress:
+                            
+                        case .inProgress, .halftime, .finalQuarter:
                             BoxscoreView(boxscore: self.viewModel.gameDetailCatalogAsyncData.data?.boxscore ?? .defaultValue)
                         case .final:
                             EmptyView()
-                        case .finalQuarter:
-                            Text("Final Quarter")
+                    
                         case .unknown:
                             EmptyView()
                         }
+                        
+                        VenueInformationView(venue: self.viewModel.gameDetailCatalogAsyncData.data?.venue ?? .defaultValue)
                     }
                 }
             }
