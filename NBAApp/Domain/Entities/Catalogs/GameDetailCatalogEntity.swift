@@ -14,7 +14,8 @@ struct GameDetailCatalogEntity: Entity {
     let leaders: CountedListEntity<LeadersEntity>
     let injuries: CountedListEntity<InjuriesEntity>
     let predictor: PredictorEntity
-    let news: CountedListEntity<NewEntity> //TODO: Revisar como se obtienen los datos y ver si es necesario agregar HEADER
+    let header: HeaderEntity
+    let news: CountedListEntity<NewEntity>
     let videos: CountedListEntity<VideoEntity>
     
     
@@ -26,6 +27,7 @@ struct GameDetailCatalogEntity: Entity {
             leaders: .defaultValue,
             injuries: .defaultValue,
             predictor: .defaultValue,
+            header: .defaultValue,
             news: .defaultValue,
             videos: .defaultValue
         )

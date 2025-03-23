@@ -18,8 +18,9 @@ class TeamDTO: DTO {
     private(set) var alternateColor: String
     private(set) var isActive: Bool
     private(set) var logo: String
+    private(set) var logos: CountedListDTO<LogoDTO>
     
-    init(id: String, location: String, name: String, abbreviation: String, displayName: String, shortDisplayName: String, color: String, alternateColor: String, isActive: Bool, logo: String) {
+    init(id: String, location: String, name: String, abbreviation: String, displayName: String, shortDisplayName: String, color: String, alternateColor: String, isActive: Bool, logo: String, logos: CountedListDTO<LogoDTO>) {
         self.id = id
         self.location = location
         self.name = name
@@ -30,6 +31,7 @@ class TeamDTO: DTO {
         self.alternateColor = alternateColor
         self.isActive = isActive
         self.logo = logo
+        self.logos = logos
     }
     
     func toEntity() -> TeamEntity {
@@ -43,7 +45,11 @@ class TeamDTO: DTO {
             color: self.color,
             alternateColor: self.alternateColor,
             isActive: self.isActive,
-            logo: self.logo
+            logo: self.logo,
+            logos: .init(
+                count: self.logos.count,
+                items: self.logos.items.compactMap { $0.toEntity() }
+            )
         )
     }
     
@@ -58,7 +64,8 @@ class TeamDTO: DTO {
             color: "",
             alternateColor: "",
             isActive: false,
-            logo: ""
+            logo: "",
+            logos: .defaultValue
         )
     }
 }
@@ -67,17 +74,20 @@ extension TeamDTO: ParseableDTO {
     static func toObject(fromData data: Any?) -> TeamDTO? {
         if let data: [String: Any] = data as? [String: Any] {
             
+            let logos: CountedListDTO<LogoDTO> = LogoDTO.toList(fromData: data.getArray(key: "logos")) ?? .defaultValue
+            
             return .init(
                 id: data.getString(key: "id"),
                 location: data.getString(key: "location"),
-                name: data.getString(key: "id"),
+                name: data.getString(key: "name"),
                 abbreviation: data.getString(key: "abbreviation"),
                 displayName: data.getString(key: "displayName"),
                 shortDisplayName: data.getString(key: "shortDisplayName"),
                 color: data.getString(key: "color"),
                 alternateColor: data.getString(key: "alternateColor"),
                 isActive: data.getBool(key: "isActive"),
-                logo: data.getString(key: "logo")
+                logo: data.getString(key: "logo"),
+                logos: logos
             )
         }
         return nil

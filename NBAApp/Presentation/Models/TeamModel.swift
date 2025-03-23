@@ -18,8 +18,9 @@ class TeamModel: Model {
     private(set) var alternateColor: String
     private(set) var isActive: Bool
     private(set) var logo: String
+    private(set) var logos: CountedListModel<LogoModel>
     
-    init(id: String, location: String, name: String, abbreviation: String, displayName: String, shortDisplayName: String, color: String, alternateColor: String, isActive: Bool, logo: String) {
+    init(id: String, location: String, name: String, abbreviation: String, displayName: String, shortDisplayName: String, color: String, alternateColor: String, isActive: Bool, logo: String, logos: CountedListModel<LogoModel>) {
         self.id = id
         self.location = location
         self.name = name
@@ -30,6 +31,7 @@ class TeamModel: Model {
         self.alternateColor = alternateColor
         self.isActive = isActive
         self.logo = logo
+        self.logos = logos
     }
     
     func toEntity() -> TeamEntity {
@@ -43,7 +45,11 @@ class TeamModel: Model {
             color: self.color,
             alternateColor: self.alternateColor,
             isActive: self.isActive,
-            logo: self.logo
+            logo: self.logo,
+            logos: .init(
+                count: self.logos.count,
+                items: self.logos.items.compactMap { $0.toEntity() }
+            )
         )
     }
     
@@ -58,7 +64,8 @@ class TeamModel: Model {
             color: "",
             alternateColor: "",
             isActive: false,
-            logo: ""
+            logo: "",
+            logos: .defaultValue
         )
     }
     
@@ -73,7 +80,8 @@ class TeamModel: Model {
             color: "#000000",
             alternateColor: "#FFFFFF",
             isActive: true,
-            logo: "sample_logo_url"
+            logo: "sample_logo_url",
+            logos: .shimmerValue
         )
     }
     
@@ -99,7 +107,8 @@ extension TeamModel: ParseableModel {
                 color: data.color,
                 alternateColor: data.alternateColor,
                 isActive: data.isActive,
-                logo: data.logo
+                logo: data.logo,
+                logos: LogoModel.toList(fromData: data.logos)
             )
         }
         return .defaultValue

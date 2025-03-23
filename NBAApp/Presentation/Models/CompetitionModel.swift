@@ -8,13 +8,15 @@
 import Foundation
 
 class CompetitionModel: Model {
+    private(set) var date: String
     private(set) var venue: VenueModel
     private(set) var competitors: CountedListModel<CompetitorModel>
     private(set) var status: StatusModel
     private(set) var highlights: CountedListModel<HighlightModel>
     private(set) var headlines: CountedListModel<HeadlineModel>
     
-    init(venue: VenueModel, competitors: CountedListModel<CompetitorModel>, status: StatusModel, highlights: CountedListModel<HighlightModel>, headlines: CountedListModel<HeadlineModel>) {
+    init(date: String, venue: VenueModel, competitors: CountedListModel<CompetitorModel>, status: StatusModel, highlights: CountedListModel<HighlightModel>, headlines: CountedListModel<HeadlineModel>) {
+        self.date = date
         self.venue = venue
         self.competitors = competitors
         self.status = status
@@ -24,6 +26,7 @@ class CompetitionModel: Model {
     
     func toEntity() -> CompetitionEntity {
         return .init(
+            date: self.date,
             venue: self.venue.toEntity(),
             competitors: .init(
                 count: self.competitors.count,
@@ -43,6 +46,7 @@ class CompetitionModel: Model {
     
     static var defaultValue: CompetitionModel {
         .init(
+            date: "",
             venue: .defaultValue,
             competitors: .defaultValue,
             status: .defaultValue,
@@ -53,6 +57,7 @@ class CompetitionModel: Model {
     
     static var shimmerValue: CompetitionModel {
         .init(
+            date: "321332",
             venue: .shimmerValue,
             competitors: .shimmerValue,
             status: .shimmerValue,
@@ -74,6 +79,7 @@ extension CompetitionModel: ParseableModel {
     static func toObject(fromData data: Any?) -> CompetitionModel {
         if let data: CompetitionEntity = data as? CompetitionEntity {
             return .init(
+                date: data.date,
                 venue: .toObject(fromData: data.venue),
                 competitors: CompetitorModel.toList(fromData: data.competitors),
                 status: StatusModel.toObject(fromData: data.status),

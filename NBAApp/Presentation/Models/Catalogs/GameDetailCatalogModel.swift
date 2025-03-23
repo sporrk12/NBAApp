@@ -14,16 +14,18 @@ class GameDetailCatalogModel: Model {
     private(set) var leaders: CountedListModel<LeadersModel>
     private(set) var injuries: CountedListModel<InjuriesModel>
     private(set) var predictor: PredictorModel
+    private(set) var header: HeaderModel
     private(set) var news: CountedListModel<NewModel>
     private(set) var videos: CountedListModel<VideoModel>
-
-    init(boxscore: BoxScoreModel, venue: VenueModel, lastFiveGames: CountedListModel<LastFiveGameModel>, leaders: CountedListModel<LeadersModel>, injuries: CountedListModel<InjuriesModel>, predictor: PredictorModel, news: CountedListModel<NewModel>, videos: CountedListModel<VideoModel>) {
+    
+    init(boxscore: BoxScoreModel, venue: VenueModel, lastFiveGames: CountedListModel<LastFiveGameModel>, leaders: CountedListModel<LeadersModel>, injuries: CountedListModel<InjuriesModel>, predictor: PredictorModel, header: HeaderModel, news: CountedListModel<NewModel>, videos: CountedListModel<VideoModel>) {
         self.boxscore = boxscore
         self.venue = venue
         self.lastFiveGames = lastFiveGames
         self.leaders = leaders
         self.injuries = injuries
         self.predictor = predictor
+        self.header = header
         self.news = news
         self.videos = videos
     }
@@ -45,6 +47,7 @@ class GameDetailCatalogModel: Model {
                 items: self.injuries.items.compactMap { $0.toEntity() }
             ),
             predictor: self.predictor.toEntity(),
+            header: self.header.toEntity(),
             news: .init(
                 count: self.news.count,
                 items: self.news.items.compactMap { $0.toEntity() }
@@ -64,6 +67,7 @@ class GameDetailCatalogModel: Model {
             leaders: .defaultValue,
             injuries: .defaultValue,
             predictor: .defaultValue,
+            header: .defaultValue,
             news: .defaultValue,
             videos: .defaultValue
         )
@@ -86,6 +90,7 @@ class GameDetailCatalogModel: Model {
                 items: (1...2).map { _ in .shimmerValue }
             ),
             predictor: .shimmerValue,
+            header: .shimmerValue,
             news: CountedListModel<NewModel>(
                 count: 3,
                 items: (1...3).map { _ in .shimmerValue }
@@ -116,6 +121,7 @@ extension GameDetailCatalogModel: ParseableModel {
                 leaders: LeadersModel.toList(fromData: data.leaders),
                 injuries: InjuriesModel.toList(fromData: data.injuries),
                 predictor: PredictorModel.toObject(fromData: data.predictor),
+                header: HeaderModel.toObject(fromData: data.header),
                 news: NewModel.toList(fromData: data.news),
                 videos: VideoModel.toList(fromData: data.videos)
             )

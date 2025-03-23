@@ -14,16 +14,18 @@ class GameDetailCatalogDTO: DTO {
     private(set) var leaders: CountedListDTO<LeadersDTO>
     private(set) var injuries: CountedListDTO<InjuriesDTO>
     private(set) var predictor: PredictorDTO
-    private(set) var news: CountedListDTO<NewDTO> //TODO: Ver si es necesario agregar HEADER
+    private(set) var header: HeaderDTO
+    private(set) var news: CountedListDTO<NewDTO>
     private(set) var videos: CountedListDTO<VideoDTO>
     
-    init(boxscore: BoxScoreDTO, venue: VenueDTO, lastFiveGames: CountedListDTO<LastFiveGameDTO>, leaders: CountedListDTO<LeadersDTO>, injuries: CountedListDTO<InjuriesDTO>, predictor: PredictorDTO, news: CountedListDTO<NewDTO>, videos: CountedListDTO<VideoDTO>) {
+    init(boxscore: BoxScoreDTO, venue: VenueDTO, lastFiveGames: CountedListDTO<LastFiveGameDTO>, leaders: CountedListDTO<LeadersDTO>, injuries: CountedListDTO<InjuriesDTO>, predictor: PredictorDTO, header: HeaderDTO, news: CountedListDTO<NewDTO>, videos: CountedListDTO<VideoDTO>) {
         self.boxscore = boxscore
         self.venue = venue
         self.lastFiveGames = lastFiveGames
         self.leaders = leaders
         self.injuries = injuries
         self.predictor = predictor
+        self.header = header
         self.news = news
         self.videos = videos
     }
@@ -45,6 +47,7 @@ class GameDetailCatalogDTO: DTO {
                 items: self.injuries.items.compactMap { $0.toEntity() }
             ),
             predictor: self.predictor.toEntity(),
+            header: self.header.toEntity(),
             news: .init(
                 count: self.news.count,
                 items: self.news.items.compactMap { $0.toEntity() }
@@ -64,6 +67,7 @@ class GameDetailCatalogDTO: DTO {
             leaders: .defaultValue,
             injuries: .defaultValue,
             predictor: .defaultValue,
+            header: .defaultValue,
             news: .defaultValue,
             videos: .defaultValue
         )
@@ -91,6 +95,7 @@ extension GameDetailCatalogDTO: ParseableDTO {
                 leaders: leaders,
                 injuries: injuries,
                 predictor: .toObject(fromData: data.getDictionary(key: "predictor")) ?? .defaultValue,
+                header: .toObject(fromData: data.getDictionary(key: "header")) ?? .defaultValue,
                 news: news,
                 videos: videos
             )

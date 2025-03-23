@@ -81,7 +81,7 @@ extension CompetitorDTO: ParseableDTO {
             
             let leaders: CountedListDTO<LeaderDTO> = LeaderDTO.toList(fromData: data.getArray(key: "leaders")) ?? .defaultValue
             
-            let records: CountedListDTO<RecordDTO> = RecordDTO.toList(fromData: data.getArray(key: "records")) ?? .defaultValue
+            let records: CountedListDTO<RecordDTO> = RecordDTO.toList(fromData: data.getArray(keys: ["records", "record"])) ?? .defaultValue
             
             return .init(
                 id: data.getString(key: "id"),

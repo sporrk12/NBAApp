@@ -8,13 +8,15 @@
 import Foundation
 
 class CompetitionDTO: DTO {
+    private(set) var date: String
     private(set) var venue: VenueDTO
     private(set) var competitors: CountedListDTO<CompetitorDTO>
     private(set) var status: StatusDTO
     private(set) var highlights: CountedListDTO<HighlightDTO>
     private(set) var headlines: CountedListDTO<HeadlineDTO>
     
-    init(venue: VenueDTO, competitors: CountedListDTO<CompetitorDTO>, status: StatusDTO, highlights: CountedListDTO<HighlightDTO>, headlines: CountedListDTO<HeadlineDTO>) {
+    init(date: String, venue: VenueDTO, competitors: CountedListDTO<CompetitorDTO>, status: StatusDTO, highlights: CountedListDTO<HighlightDTO>, headlines: CountedListDTO<HeadlineDTO>) {
+        self.date = date
         self.venue = venue
         self.competitors = competitors
         self.status = status
@@ -24,6 +26,7 @@ class CompetitionDTO: DTO {
     
     func toEntity() -> CompetitionEntity {
         return .init(
+            date: self.date,
             venue: self.venue.toEntity(),
             competitors: .init(
                 count: self.competitors.count,
@@ -43,6 +46,7 @@ class CompetitionDTO: DTO {
     
     static var defaultValue: CompetitionDTO {
         .init(
+            date: "",
             venue: .defaultValue,
             competitors: .defaultValue,
             status: .defaultValue,
@@ -63,6 +67,7 @@ extension CompetitionDTO: ParseableDTO {
             let headlines: CountedListDTO<HeadlineDTO> = HeadlineDTO.toList(fromData: data.getArray(key: "headlines")) ?? .defaultValue
             
             return .init(
+                date: data.getString(key: "date"),
                 venue: .toObject(fromData: data.getDictionary(key: "venue")) ?? .defaultValue,
                 competitors: competitors,
                 status: .toObject(fromData: data.getDictionary(key: "status")) ?? .defaultValue,

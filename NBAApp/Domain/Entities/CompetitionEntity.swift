@@ -8,6 +8,7 @@
 import Foundation
 
 struct CompetitionEntity: Entity {
+    let date: String
     let venue: VenueEntity
     let competitors: CountedListEntity<CompetitorEntity>
     let status: StatusEntity
@@ -16,6 +17,7 @@ struct CompetitionEntity: Entity {
     
     static var defaultValue: CompetitionEntity {
         .init(
+            date: "",
             venue: .defaultValue,
             competitors: .defaultValue,
             status: .defaultValue,

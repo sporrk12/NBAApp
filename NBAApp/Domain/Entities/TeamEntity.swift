@@ -18,6 +18,7 @@ struct TeamEntity: Entity {
     let alternateColor: String
     let isActive: Bool
     let logo: String
+    let logos: CountedListEntity<LogoEntity>
     
     static var defaultValue: TeamEntity {
         .init(
@@ -30,7 +31,8 @@ struct TeamEntity: Entity {
             color: "",
             alternateColor: "",
             isActive: false,
-            logo: ""
+            logo: "",
+            logos: .defaultValue
         )
     }
 }
