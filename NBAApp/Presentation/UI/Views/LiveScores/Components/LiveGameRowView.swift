@@ -52,6 +52,7 @@ struct LiveGameRowView: View {
         competitions: .init(
             count: 1,
             items: [CompetitionModel(
+                date: "432432432",
                 venue: VenueModel(
                     id: "5404",
                     fullName: "Little Caesars Arena",
@@ -76,7 +77,7 @@ struct LiveGameRowView: View {
                             color: "1d428a",
                             alternateColor: "c8102e",
                             isActive: true,
-                            logo: "https://a.espncdn.com/i/teamlogos/nba/500/scoreboard/det.png"
+                            logo: "https://a.espncdn.com/i/teamlogos/nba/500/scoreboard/det.png", logos: .defaultValue
                         ),
                         score: "0",
                         lineScores: .defaultValue,
@@ -97,7 +98,7 @@ struct LiveGameRowView: View {
                             color: "e31837",
                             alternateColor: "002b5c",
                             isActive: true,
-                            logo: "https://a.espncdn.com/i/teamlogos/nba/500/scoreboard/wsh.png"
+                            logo: "https://a.espncdn.com/i/teamlogos/nba/500/scoreboard/wsh.png", logos: .defaultValue
                         ),
                         score: "0",
                         lineScores: .defaultValue,

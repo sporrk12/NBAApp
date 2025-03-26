@@ -47,11 +47,10 @@ struct PredictorChartView: View {
     }
     
     var body: some View {
-        VStack {
+        VStack(alignment: .leading){
             Text(predictor.header)
-                .font(.title)
+                .font(.title2)
                 .bold()
-                .padding()
             
             ZStack {
                 
@@ -73,7 +72,7 @@ struct PredictorChartView: View {
                                 url: URL(string: awayTeam.team.logo)
                             )
                             .resizable()
-                            .frame(width: 100, height: 100)
+                            .frame(width: 50, height: 50)
                             
                             Text("\(String(format: "%.1f", awayWinChance))%")
                                 .font(.headline)
@@ -82,7 +81,7 @@ struct PredictorChartView: View {
                         
                         Rectangle()
                             .fill(Color.white)
-                            .frame(width: 2, height: 150)
+                            .frame(width: 2, height: 50)
                         
                         
                         VStack {
@@ -90,7 +89,7 @@ struct PredictorChartView: View {
                                 url: URL(string: homeTeam.team.logo)
                             )
                             .resizable()
-                            .frame(width: 100, height: 100)
+                            .frame(width: 50, height: 50)
                             Text("\(String(format: "%.1f", homeWinChance))%")
                                 .font(.headline)
                                 .foregroundColor(.white)
@@ -99,6 +98,9 @@ struct PredictorChartView: View {
                 }
             }
         }
+        .padding()
+        .background(Color.gray.opacity(0.2))
+        .cornerRadius(10)
     }
 }
 
@@ -123,7 +125,8 @@ struct PredictorChartView: View {
                         color: "1d428a",
                         alternateColor: "f58426",
                         isActive: true,
-                        logo: "https://a.espncdn.com/i/teamlogos/nba/500/ny.png"
+                        logo: "https://a.espncdn.com/i/teamlogos/nba/500/ny.png",
+                        logos: .defaultValue
                     ),
                 statistics: .defaultValue,
                 displayOrder: 1,
@@ -140,7 +143,8 @@ struct PredictorChartView: View {
                         color: "fdb927",
                         alternateColor: "1d428a",
                         isActive: true,
-                        logo: "https://a.espncdn.com/i/teamlogos/nba/500/gs.png"
+                        logo: "https://a.espncdn.com/i/teamlogos/nba/500/gs.png",
+                        logos: .defaultValue
                     ),
                 statistics: .defaultValue,
                 displayOrder: 0,
