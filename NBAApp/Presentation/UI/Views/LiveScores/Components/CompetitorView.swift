@@ -22,32 +22,29 @@ struct CompetitorView: View {
             .frame(width: 80, height: 80)
             
             Spacer()
+            VStack {
+                Text(team.team.location)
+                Text(team.team.name)
+            }
+            .font(Font(Fonts.body1.medium500))
             
-            Text(team.team.displayName)
-                .font(Font(Fonts.body1.medium500))
-                
             Spacer()
             
             switch status {
             case .pre:
                 Text(team.records.items.first?.summary ?? "")
                     .font(Font(Fonts.h4.medium500))
-                   
-   
-               
                 
             case .final, .finalQuarter, .inProgress, .halftime:
                 Text(team.score)
                     .font(Font(Fonts.h2.semibold600))
-                   
-                
                 
             case .unknown:
                 EmptyView()
                 
- 
-            }
                 
+            }
+            
         }
         .foregroundStyle(Color.white)
         .frame(maxWidth: .infinity)
@@ -70,7 +67,8 @@ struct CompetitorView: View {
                 color: "1d428a",
                 alternateColor: "c8102e",
                 isActive: true,
-                logo: "https://a.espncdn.com/i/teamlogos/nba/500/scoreboard/det.png"
+                logo: "https://a.espncdn.com/i/teamlogos/nba/500/scoreboard/det.png",
+                logos: .defaultValue
             ),
             score: "0",
             lineScores: .defaultValue,

@@ -16,26 +16,18 @@ struct LiveScoresView: View {
     )
     
     var body: some View {
-        NavigationView {
+        NavigationStack {
             Group {
-                if viewModel.gameByDayScoresAsyncData.isInProgress {
-                    
-                    ZStack {
-                        Color.black.ignoresSafeArea()
-                        ProgressView()
-                            .progressViewStyle(CircularProgressViewStyle(tint: .white))
-                            .scaleEffect(1.5)
-                    }
-                } else {
+                if self.viewModel.gameByDayScoresAsyncData.isInProgress {
+                    LoadingView()
+                }else {
                     
                     ScrollView(showsIndicators: false) {
-                        VStack(alignment: .leading, spacing: 10) {
-                            
-                            
+                        VStack(alignment: .leading, spacing: 35) {
                             WeekCalendarView(
                                 selectedDate: self.$selectedDate
                             )
-                            .frame(height: 70)
+                            .frame(height: 35)
                             
                             ForEach(self.viewModel.gameByDayScoresAsyncData.data?.items ?? [], id: \.id) { game in
                                 NavigationLink(
@@ -48,27 +40,39 @@ struct LiveScoresView: View {
                                     LiveGameRowView(game: game)
                                 }
                             }
+                            .simultaneousGesture(
+                                DragGesture()
+                                    .onEnded { value in
+                                        let horizontalAmount = value.translation.width
+                                        
+                                        if horizontalAmount > 70 {
+                                            self.selectedDate = Calendar.current.date(byAdding: .day, value: -1, to: self.selectedDate) ?? self.selectedDate
+                                        } else if horizontalAmount < -70 {
+                                            self.selectedDate = Calendar.current.date(byAdding: .day, value: 1, to: self.selectedDate) ?? self.selectedDate
+                                        }
+                                    }
+                            )
                         }
-                        .padding()
                     }
-                    
+                    .padding(.top, 10)
                 }
             }
-            .navigationTitle("NBA Scoreboard")
+            .navigationTitle("Game Schedule")
             .refreshable {
                 self.refreshLiveScores()
             }
-            .onChange(of: selectedDate) { oldDate, newDate in
-                self.viewModel.getGamesByDate(date: newDate.toString())
+            .onChange(of: self.selectedDate) { oldDate, newDate in
+                self.refreshLiveScores()
             }
         }
         .onReceive(NotificationCenter.default.publisher(for: UIApplication.willEnterForegroundNotification)) { _ in
             self.refreshLiveScores()
         }
+        
     }
     
     private func refreshLiveScores() {
-        self.viewModel.getGamesByDate(date: selectedDate.toString())
+        self.viewModel.getGamesByDate(date: self.selectedDate.toString())
     }
 }
 
