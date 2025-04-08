@@ -31,17 +31,18 @@ struct PredictorChartView: View {
     
     var data: [(team: String, chance: Double, color: Color, logo: String?)] {
         [
+
+            (
+                awayTeam.team.displayName,
+                awayWinChance,
+                Color(hex: awayTeam.team.color ),
+                awayTeam.team.logo
+            ),
             (
                 homeTeam.team.displayName,
                 homeWinChance,
                 Color(hex: homeTeam.team.color),
                 homeTeam.team.logo
-            ),
-            (
-                awayTeam.team.displayName,
-                awayWinChance,
-                Color(hex: awayTeam.team.alternateColor ),
-                awayTeam.team.logo
             )
         ]
     }
@@ -69,12 +70,12 @@ struct PredictorChartView: View {
                         
                         VStack {
                             WebImage(
-                                url: URL(string: awayTeam.team.logo)
+                                url: URL(string: homeTeam.team.logo)
                             )
                             .resizable()
                             .frame(width: 50, height: 50)
                             
-                            Text("\(String(format: "%.1f", awayWinChance))%")
+                            Text("\(String(format: "%.1f", homeWinChance))%")
                                 .font(.headline)
                                 .foregroundColor(.white)
                         }
@@ -86,11 +87,11 @@ struct PredictorChartView: View {
                         
                         VStack {
                             WebImage(
-                                url: URL(string: homeTeam.team.logo)
+                                url: URL(string: awayTeam.team.logo)
                             )
                             .resizable()
                             .frame(width: 50, height: 50)
-                            Text("\(String(format: "%.1f", homeWinChance))%")
+                            Text("\(String(format: "%.1f", awayWinChance))%")
                                 .font(.headline)
                                 .foregroundColor(.white)
                         }

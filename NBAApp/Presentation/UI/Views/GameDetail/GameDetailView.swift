@@ -9,6 +9,8 @@ import SwiftUI
 import SDWebImageSwiftUI
 
 struct GameDetailView: View {
+    @Environment(\.presentationMode) var presentationMode
+    
     let gameId: String
     let gameStatus: StatusTypeCategory
     
@@ -20,19 +22,14 @@ struct GameDetailView: View {
         ScrollView(showsIndicators: false){
             VStack{
                 if self.viewModel.gameDetailCatalogAsyncData.isInProgress {
-                    ZStack {
-                        Color.black.ignoresSafeArea()
-                        ProgressView()
-                            .progressViewStyle(CircularProgressViewStyle(tint: .white))
-                            .scaleEffect(1.5)
-                    }
+                    LoadingView()
                 }
                 else{
                     VStack {
                         switch gameStatus {
                         case .pre:
-                            PreGameHeaderView(header: self.viewModel.gameDetailCatalogAsyncData.data?.header ?? .defaultValue)
-                            Divider()
+                            GameHeaderView(header: self.viewModel.gameDetailCatalogAsyncData.data?.header ?? .defaultValue, isPreGame: true)
+                            
                             PredictorChartView(
                                 predictor: self.viewModel.gameDetailCatalogAsyncData.data?.predictor ?? .defaultValue,
                                 teams: self.viewModel.gameDetailCatalogAsyncData.data?.boxscore.teams ?? .defaultValue
@@ -46,12 +43,13 @@ struct GameDetailView: View {
                             
                             
                         case .inProgress, .halftime, .finalQuarter:
+                            GameHeaderView(header: self.viewModel.gameDetailCatalogAsyncData.data?.header ?? .defaultValue, isPreGame: false)
                             EmptyView()
-                            LeadersView(leaders: self.viewModel.gameDetailCatalogAsyncData.data?.leaders ?? .defaultValue, isPreGame: true)
+                            LeadersView(leaders: self.viewModel.gameDetailCatalogAsyncData.data?.leaders ?? .defaultValue, isPreGame: false)
                             
                         case .final:
-                            EmptyView()
-                            LeadersView(leaders: self.viewModel.gameDetailCatalogAsyncData.data?.leaders ?? .defaultValue, isPreGame: true)
+                            GameHeaderView(header: self.viewModel.gameDetailCatalogAsyncData.data?.header ?? .defaultValue, isPreGame: false)
+                            LeadersView(leaders: self.viewModel.gameDetailCatalogAsyncData.data?.leaders ?? .defaultValue, isPreGame: false)
                             
                         case .unknown:
                             EmptyView()
@@ -66,13 +64,23 @@ struct GameDetailView: View {
         .onAppear {
             self.viewModel.getGameDetail(gameId: gameId)
         }
+        .navigationBarTitleDisplayMode(.inline)
+        .toolbar {
+            ToolbarItem(placement: .principal) {
+                HStack{
+                    Text("Game detail")
+                }
+            }
+        }
     }
     
     @ViewBuilder
-    func PreGameHeaderView(header: HeaderModel, isPreGame: Bool) -> some View {
+    func GameHeaderView(header: HeaderModel, isPreGame: Bool) -> some View {
         
-        
-        ZStack() {
+        HStack() {
+            
+            TeamInformation(competitor: header.competitions.items.first?.competitors.items.first ?? .defaultValue)
+            
             if isPreGame {
                 VStack(spacing: 5){
                     
@@ -85,41 +93,60 @@ struct GameDetailView: View {
                 .padding(.top)
                 
             }
-//            else{
-//                VStack{
-//                    Text(header.competitions.items.first?)
-//
-//                    Text()
-//                }
-//            }
-
-            
-            
-            HStack {
-                ForEach (header.competitions.items.first?.competitors.items ?? [], id: \.team.id) { competitor in
-                    VStack{
-                        WebImage(url: URL(string: competitor.team.logos.items[5].href))
-                            .resizable()
-                            .frame(width: 70, height: 70)
+            else{
+                VStack{
+                    HStack(spacing: 5){
                         
-                        Text(competitor.team.name)
+                        Text(header.competitions.items.first?.competitors.items.first?.score ?? .defaultValue)
                         
-                        Text(competitor.records.items[0].summary)
+                        Text(" - ")
                         
-                        
+                        Text(header.competitions.items.first?.competitors.items.last?.score ?? .defaultValue)
                     }
-                    .padding(.horizontal, 60)
-
+                    .font(.system(size: 36, weight: .bold))
+                    
+                    Text(header.competitions.items.first?.status.type.shortDetail ?? .defaultValue)
+                        .font(Font(Fonts.body1.regular400))
                 }
+                
+                .foregroundColor(.white)
+                .padding(.top)
             }
             
+            
+            TeamInformation(competitor: header.competitions.items.first?.competitors.items.last ?? .defaultValue)
+            
+        }
+        .padding()
+        .frame(maxWidth: .infinity)
+        .background(Color.gray.opacity(0.2))
+        .cornerRadius(10)
+    
+    }
+    
+    func TeamInformation(competitor: CompetitorModel) -> some View {
+        VStack{
+            if competitor.id == "" {
+                Rectangle()
+                    .fill(Color.gray)
+                    .frame(width: 70, height: 70)
+            }
+            else {
+                WebImage(url: URL(string: competitor.team.logos.items[5].href))
+                    .resizable()
+                    .frame(width: 70, height: 70)
+                
+                Text(competitor.team.name)
+                
+                Text(competitor.records.items[0].summary)
+            }
         }
     }
     
 }
 
 #Preview {
-    GameDetailView(gameId: "401705562", gameStatus: .pre)
+    GameDetailView(gameId: "401705562", gameStatus: .final)
 }
 
 
