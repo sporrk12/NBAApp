@@ -13,9 +13,19 @@ struct ContentView: View {
             LiveScoresView()
                 .tabItem {
                     VStack {
-                        Image(systemName: "basketball.fill")
+                        Image(systemName: "sportscourt.fill")
                             .foregroundStyle(.tint)
                         Text("Live")
+                            .foregroundStyle(.tint)
+                    }
+                }
+            
+            TeamsView()
+                .tabItem {
+                    VStack {
+                        Image(systemName: "basketball.fill")
+                            .foregroundStyle(.tint)
+                        Text("Teams")
                             .foregroundStyle(.tint)
                     }
                 }
