@@ -19,8 +19,12 @@ class TeamModel: Model {
     private(set) var isActive: Bool
     private(set) var logo: String
     private(set) var logos: CountedListModel<LogoModel>
+    private(set) var records: CountedListModel<RecordModel>
+    private(set) var venue: VenueModel
+    private(set) var standingSummary: String
+    private(set) var nextEvent: CountedListModel<EventModel>
     
-    init(id: String, location: String, name: String, abbreviation: String, displayName: String, shortDisplayName: String, color: String, alternateColor: String, isActive: Bool, logo: String, logos: CountedListModel<LogoModel>) {
+    init(id: String, location: String, name: String, abbreviation: String, displayName: String, shortDisplayName: String, color: String, alternateColor: String, isActive: Bool, logo: String, logos: CountedListModel<LogoModel>, records: CountedListModel<RecordModel>, venue: VenueModel, standingSummary: String, nextEvent: CountedListModel<EventModel>) {
         self.id = id
         self.location = location
         self.name = name
@@ -32,6 +36,10 @@ class TeamModel: Model {
         self.isActive = isActive
         self.logo = logo
         self.logos = logos
+        self.records = records
+        self.venue = venue
+        self.standingSummary = standingSummary
+        self.nextEvent = nextEvent
     }
     
     func toEntity() -> TeamEntity {
@@ -49,6 +57,16 @@ class TeamModel: Model {
             logos: .init(
                 count: self.logos.count,
                 items: self.logos.items.compactMap { $0.toEntity() }
+            ),
+            records: .init(
+                count: self.records.count,
+                items: self.records.items.compactMap { $0.toEntity() }
+            ),
+            venue: self.venue.toEntity(),
+            standingSummary: self.standingSummary,
+            nextEvent: .init(
+                count: self.nextEvent.count,
+                items: self.nextEvent.items.compactMap { $0.toEntity() }
             )
         )
     }
@@ -65,7 +83,11 @@ class TeamModel: Model {
             alternateColor: "",
             isActive: false,
             logo: "",
-            logos: .defaultValue
+            logos: .defaultValue,
+            records: .defaultValue,
+            venue: .defaultValue,
+            standingSummary: "",
+            nextEvent: .defaultValue
         )
     }
     
@@ -81,7 +103,11 @@ class TeamModel: Model {
             alternateColor: "#FFFFFF",
             isActive: true,
             logo: "sample_logo_url",
-            logos: .shimmerValue
+            logos: .shimmerValue,
+            records: .shimmerValue,
+            venue: .defaultValue,
+            standingSummary: "",
+            nextEvent: .defaultValue
         )
     }
     
@@ -108,7 +134,11 @@ extension TeamModel: ParseableModel {
                 alternateColor: data.alternateColor,
                 isActive: data.isActive,
                 logo: data.logo,
-                logos: LogoModel.toList(fromData: data.logos)
+                logos: LogoModel.toList(fromData: data.logos),
+                records: RecordModel.toList(fromData: data.records),
+                venue: VenueModel.toObject(fromData: data.venue),
+                standingSummary: data.standingSummary,
+                nextEvent: EventModel.toList(fromData: data.nextEvent)
             )
         }
         return .defaultValue

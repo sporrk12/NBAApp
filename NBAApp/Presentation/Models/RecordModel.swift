@@ -12,12 +12,14 @@ class RecordModel: Model {
     private(set) var abbreviation: String
     private(set) var type: String
     private(set) var summary: String
+    private(set) var stats: CountedListModel<StatModel>
     
-    init(name: String, abbreviation: String, type: String, summary: String) {
+    init(name: String, abbreviation: String, type: String, summary: String, stats: CountedListModel<StatModel>) {
         self.name = name
         self.abbreviation = abbreviation
         self.type = type
         self.summary = summary
+        self.stats = stats
     }
     
     func toEntity() -> RecordEntity {
@@ -25,7 +27,11 @@ class RecordModel: Model {
             name: self.name,
             abbreviation: self.abbreviation,
             type: self.type,
-            summary: self.summary
+            summary: self.summary,
+            stats: .init(
+                count: self.stats.count,
+                items: self.stats.items.compactMap { $0.toEntity() }
+            )
         )
     }
     
@@ -34,7 +40,8 @@ class RecordModel: Model {
             name: "",
             abbreviation: "",
             type: "",
-            summary: ""
+            summary: "",
+            stats: .defaultValue
         )
     }
     
@@ -43,7 +50,8 @@ class RecordModel: Model {
             name: "Wins",
             abbreviation: "W",
             type: "Regular Season",
-            summary: "50-32"
+            summary: "50-32",
+            stats: .defaultValue
         )
     }
     
@@ -63,7 +71,8 @@ extension RecordModel: ParseableModel {
                 name: data.name,
                 abbreviation: data.abbreviation,
                 type: data.type,
-                summary: data.summary
+                summary: data.summary,
+                stats: StatModel.toList(fromData: data.stats)
             )
         }
         return .defaultValue

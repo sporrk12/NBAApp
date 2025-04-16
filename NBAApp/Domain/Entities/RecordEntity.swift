@@ -12,13 +12,15 @@ struct RecordEntity: Entity {
     let abbreviation: String
     let type: String
     let summary: String
+    let stats: CountedListEntity<StatEntity>
     
     static var defaultValue: RecordEntity {
         .init(
             name: "",
             abbreviation: "",
             type: "",
-            summary: ""
+            summary: "",
+            stats: .defaultValue
         )
     }
 }

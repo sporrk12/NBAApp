@@ -19,8 +19,12 @@ class TeamDTO: DTO {
     private(set) var isActive: Bool
     private(set) var logo: String
     private(set) var logos: CountedListDTO<LogoDTO>
+    private(set) var records: CountedListDTO<RecordDTO>
+    private(set) var venue: VenueDTO
+    private(set) var standingSummary: String
+    private(set) var nextEvent: CountedListDTO<EventDTO>
     
-    init(id: String, location: String, name: String, abbreviation: String, displayName: String, shortDisplayName: String, color: String, alternateColor: String, isActive: Bool, logo: String, logos: CountedListDTO<LogoDTO>) {
+    init(id: String, location: String, name: String, abbreviation: String, displayName: String, shortDisplayName: String, color: String, alternateColor: String, isActive: Bool, logo: String, logos: CountedListDTO<LogoDTO>, records: CountedListDTO<RecordDTO>, venue: VenueDTO, standingSummary: String, nextEvent: CountedListDTO<EventDTO>) {
         self.id = id
         self.location = location
         self.name = name
@@ -32,6 +36,10 @@ class TeamDTO: DTO {
         self.isActive = isActive
         self.logo = logo
         self.logos = logos
+        self.records = records
+        self.venue = venue
+        self.standingSummary = standingSummary
+        self.nextEvent = nextEvent
     }
     
     func toEntity() -> TeamEntity {
@@ -49,6 +57,16 @@ class TeamDTO: DTO {
             logos: .init(
                 count: self.logos.count,
                 items: self.logos.items.compactMap { $0.toEntity() }
+            ),
+            records: .init(
+                count: self.records.count,
+                items: self.records.items.compactMap { $0.toEntity() }
+            ),
+            venue: self.venue.toEntity(),
+            standingSummary: self.standingSummary,
+            nextEvent: .init(
+                count: self.nextEvent.count,
+                items: self.nextEvent.items.compactMap { $0.toEntity() }
             )
         )
     }
@@ -65,7 +83,11 @@ class TeamDTO: DTO {
             alternateColor: "",
             isActive: false,
             logo: "",
-            logos: .defaultValue
+            logos: .defaultValue,
+            records: .defaultValue,
+            venue: .defaultValue,
+            standingSummary: "",
+            nextEvent: .defaultValue
         )
     }
 }
@@ -75,6 +97,8 @@ extension TeamDTO: ParseableDTO {
         if let data: [String: Any] = data as? [String: Any] {
             
             let logos: CountedListDTO<LogoDTO> = LogoDTO.toList(fromData: data.getArray(key: "logos")) ?? .defaultValue
+            let records: CountedListDTO<RecordDTO> = RecordDTO.toList(fromData: data.getDictionary(key: "record")) ?? .defaultValue
+            let nextEvent: CountedListDTO<EventDTO> = EventDTO.toList(fromData: data.getArray(key: "nextEvent")) ?? .defaultValue
             
             return .init(
                 id: data.getString(key: "id"),
@@ -87,35 +111,48 @@ extension TeamDTO: ParseableDTO {
                 alternateColor: data.getString(key: "alternateColor"),
                 isActive: data.getBool(key: "isActive"),
                 logo: data.getString(key: "logo"),
-                logos: logos
+                logos: logos,
+                records: records,
+                venue: .toObject(fromData: data.getDictionary(key: "franchise").getDictionary(key: "venue")) ?? .defaultValue,
+                standingSummary: data.getString(key: "standingSummary"),
+                nextEvent: nextEvent
             )
         }
         return nil
     }
     
     static func toList(fromData data: Any?) -> CountedListDTO<TeamDTO>? {
-        if let data: [[String: Any]] = data as? [[String: Any]] {
+        if let data = data as? [[String: Any]] {
             
-            let items: [TeamDTO] = data.compactMap { toObject(fromData: $0) }
-            
-            return .init(
-                count: items.count,
-                items: items
-            )
+            let items: [TeamDTO] = data.compactMap { dict in
+                if let nested = dict["team"] as? [String: Any] {
+                    return toObject(fromData: nested)
+                } else {
+                    return toObject(fromData: dict)
+                }
+            }
+            return .init(count: items.count, items: items)
         }
         
-        if let data: [String: Any] = data as? [String: Any] {
-            var dtos: [TeamDTO] = []
-            for data in data.getArray(key: "items") {
-                if let dto: TeamDTO = .toObject(fromData: data) {
-                    dtos.append(dto)
+        if let data = data as? [String: Any] {
+            
+            let rawItems = data.getArray(key: "items")
+            let dtos: [TeamDTO] = rawItems.compactMap { item in
+                if let dict = item as? [String: Any] {
+                    if let nested = dict["team"] as? [String: Any] {
+                        return toObject(fromData: nested)
+                    } else {
+                        return toObject(fromData: dict)
+                    }
                 }
+                return nil
             }
             return .init(
                 count: data.getInt(key: "count"),
                 items: dtos
             )
         }
+
         return nil
     }
 }

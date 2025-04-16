@@ -19,6 +19,10 @@ struct TeamEntity: Entity {
     let isActive: Bool
     let logo: String
     let logos: CountedListEntity<LogoEntity>
+    let records: CountedListEntity<RecordEntity>
+    let venue: VenueEntity
+    let standingSummary: String
+    let nextEvent: CountedListEntity<EventEntity>
     
     static var defaultValue: TeamEntity {
         .init(
@@ -32,7 +36,11 @@ struct TeamEntity: Entity {
             alternateColor: "",
             isActive: false,
             logo: "",
-            logos: .defaultValue
+            logos: .defaultValue,
+            records: .defaultValue,
+            venue: .defaultValue,
+            standingSummary: "",
+            nextEvent: .defaultValue
         )
     }
 }

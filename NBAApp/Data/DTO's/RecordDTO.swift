@@ -12,12 +12,14 @@ class RecordDTO: DTO {
     private(set) var abbreviation: String
     private(set) var type: String
     private(set) var summary: String
+    private(set) var stats: CountedListDTO<StatDTO>
     
-    init(name: String, abbreviation: String, type: String, summary: String) {
+    init(name: String, abbreviation: String, type: String, summary: String, stats: CountedListDTO<StatDTO>) {
         self.name = name
         self.abbreviation = abbreviation
         self.type = type
         self.summary = summary
+        self.stats = stats
     }
     
     func toEntity() -> RecordEntity {
@@ -25,7 +27,11 @@ class RecordDTO: DTO {
             name: self.name,
             abbreviation: self.abbreviation,
             type: self.type,
-            summary: self.summary
+            summary: self.summary,
+            stats: .init(
+                count: self.stats.count,
+                items: self.stats.items.compactMap { $0.toEntity() }
+            )
         )
     }
     
@@ -34,7 +40,8 @@ class RecordDTO: DTO {
             name: "",
             abbreviation: "",
             type: "",
-            summary: ""
+            summary: "",
+            stats: .defaultValue
         )
     }
 }
@@ -43,11 +50,14 @@ extension RecordDTO: ParseableDTO {
     static func toObject(fromData data: Any?) -> RecordDTO? {
         if let data: [String: Any] = data as? [String: Any] {
             
+            let stats: CountedListDTO<StatDTO> = StatDTO.toList(fromData: data.getArray(key: "stats")) ?? .defaultValue
+            
             return .init(
-                name: data.getString(key: "name"),
+                name: data.getString(keys: ["name", "description"]),
                 abbreviation: data.getString(key: "abbreviation"),
                 type: data.getString(key: "type"),
-                summary: data.getString(key: "summary")
+                summary: data.getString(key: "summary"),
+                stats: stats
             )
         }
         return nil
